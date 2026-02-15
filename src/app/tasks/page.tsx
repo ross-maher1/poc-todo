@@ -11,6 +11,8 @@ import { useAuth } from "@/hooks/useAuth";
 import type { Task } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 
+const supabase = createClient();
+
 const taskSchema = z.object({
   title: z.string().min(1, "Title is required"),
   due_date: z.string().optional(),
@@ -23,8 +25,6 @@ export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const supabase = createClient();
 
   const {
     register,
@@ -53,7 +53,7 @@ export default function TasksPage() {
       setTasks(data || []);
     }
     setLoading(false);
-  }, [user, supabase]);
+  }, [user]);
 
   useEffect(() => {
     fetchTasks();
