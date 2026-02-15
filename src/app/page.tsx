@@ -5,12 +5,12 @@ import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
+const supabase = createClient();
+
 export default function HomePage() {
   const { user } = useAuth();
   const [pendingCount, setPendingCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
-
-  const supabase = createClient();
 
   const fetchCounts = useCallback(async () => {
     if (!user) return;
@@ -27,7 +27,7 @@ export default function HomePage() {
         data.filter((t: { completed: boolean }) => t.completed).length
       );
     }
-  }, [user, supabase]);
+  }, [user]);
 
   useEffect(() => {
     fetchCounts();

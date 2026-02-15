@@ -58,9 +58,9 @@ export async function updateSession(
  * Update this array to match your app's protected routes.
  */
 export function isProtectedPath(pathname: string): boolean {
-  const protectedPaths = ["/tasks", "/settings"];
+  const protectedPaths = ["/", "/tasks", "/settings"];
   return protectedPaths.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`)
+    (path) => pathname === path || (path !== "/" && pathname.startsWith(`${path}/`))
   );
 }
 
@@ -69,7 +69,6 @@ export function isProtectedPath(pathname: string): boolean {
  */
 export function isPublicPath(pathname: string): boolean {
   const publicPaths = [
-    "/",
     "/auth/login",
     "/auth/signup",
     "/auth/callback",
