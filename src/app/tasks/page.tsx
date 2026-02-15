@@ -37,7 +37,10 @@ export default function TasksPage() {
   });
 
   const fetchTasks = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
     const { data, error } = await supabase
       .from("tasks")
       .select("*")
