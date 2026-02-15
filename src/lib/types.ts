@@ -1,30 +1,13 @@
 /**
- * Core type definitions for the app.
- *
- * Define all shared types here. Use discriminated unions for items
- * that can be multiple types.
- *
- * Example:
- *
- * export type Item = {
- *   id: string;
- *   title: string;
- *   createdAt: string;
- * };
- *
- * export type ListItem = Item | Divider;
- *
- * export type Divider = {
- *   id: string;
- *   isDivider: true;
- *   label: string;
- * };
+ * Core type definitions for the Todo app.
  */
 
-// Placeholder type - replace with your app's types
-export type Item = {
+export type Task = {
   id: string;
+  user_id: string;
   title: string;
-  description: string;
-  createdAt: string;
+  due_date: string | null;
+  completed: boolean;
+  created_at: string;
+  updated_at: string;
 };

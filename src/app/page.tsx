@@ -1,61 +1,75 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { loadItems } from "@/lib/storage/itemStorage";
+import { useCallback, useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
-/**
- * Home/Dashboard page.
- *
- * This is a template - customize it for your app.
- */
 export default function HomePage() {
-  const [itemCount, setItemCount] = useState(0);
+  const { user } = useAuth();
+  const [pendingCount, setPendingCount] = useState(0);
+  const [completedCount, setCompletedCount] = useState(0);
+
+  const supabase = createClient();
+
+  const fetchCounts = useCallback(async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("tasks")
+      .select("completed")
+      .eq("user_id", user.id);
+
+    if (data) {
+      setPendingCount(
+        data.filter((t: { completed: boolean }) => !t.completed).length
+      );
+      setCompletedCount(
+        data.filter((t: { completed: boolean }) => t.completed).length
+      );
+    }
+  }, [user, supabase]);
 
   useEffect(() => {
-    const items = loadItems();
-    setItemCount(items.length);
-  }, []);
+    fetchCounts();
+  }, [fetchCounts]);
 
   return (
     <main className="space-y-10">
       {/* Header */}
       <div className="space-y-2">
         <p className="type-meta">Dashboard</p>
-        <h1 className="type-h1">Mini App</h1>
+        <h1 className="type-h1">Todo</h1>
         <p className="type-lead">
-          A template for building mini-apps. Data is stored locally in your
-          browser.
+          A simple task manager. Data is stored in Supabase.
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid gap-6 md:grid-cols-2">
         <Link
-          href="/items"
+          href="/tasks"
           className="group rounded-2xl border border-slate-200 bg-white/85 p-6 shadow-sm transition hover:border-slate-300 hover:shadow-md"
         >
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Items</h2>
+            <h2 className="text-lg font-semibold">Pending</h2>
             <span className="text-2xl font-bold text-slate-900">
-              {itemCount}
+              {pendingCount}
             </span>
           </div>
-          <p className="mt-2 text-sm text-slate-600">
-            View and manage your items
-          </p>
+          <p className="mt-2 text-sm text-slate-600">Tasks to complete</p>
         </Link>
 
         <Link
-          href="/settings"
+          href="/tasks"
           className="group rounded-2xl border border-slate-200 bg-white/85 p-6 shadow-sm transition hover:border-slate-300 hover:shadow-md"
         >
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Settings</h2>
+            <h2 className="text-lg font-semibold">Completed</h2>
+            <span className="text-2xl font-bold text-emerald-600">
+              {completedCount}
+            </span>
           </div>
-          <p className="mt-2 text-sm text-slate-600">
-            Configure app preferences
-          </p>
+          <p className="mt-2 text-sm text-slate-600">Tasks done</p>
         </Link>
       </div>
 
@@ -64,10 +78,10 @@ export default function HomePage() {
         <h2 className="text-lg font-semibold">Quick Actions</h2>
         <div className="mt-4 flex flex-wrap gap-3">
           <Link
-            href="/items"
+            href="/tasks"
             className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-slate-800"
           >
-            Add Item
+            Add Task
           </Link>
           <Link
             href="/settings"

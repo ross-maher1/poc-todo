@@ -1,8 +1,8 @@
 /**
  * Database Types
  *
- * Shared types for the unified user model (profiles table).
- * Add your app-specific table types below the profiles section.
+ * Shared types for the unified user model (profiles table)
+ * plus app-specific tables.
  */
 
 // ============================================================================
@@ -40,9 +40,35 @@ export interface ProfileUpdate {
 }
 
 // ============================================================================
-// DATABASE SCHEMA TYPE (for Supabase typed client)
+// TASKS
 // ============================================================================
-// Add your app-specific tables here.
+
+export interface TaskRow {
+  id: string;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+  title: string;
+  due_date: string | null;
+  completed: boolean;
+}
+
+export interface TaskInsert {
+  user_id: string;
+  title: string;
+  due_date?: string | null;
+  completed?: boolean;
+}
+
+export interface TaskUpdate {
+  title?: string;
+  due_date?: string | null;
+  completed?: boolean;
+}
+
+// ============================================================================
+// DATABASE SCHEMA TYPE
+// ============================================================================
 
 export interface Database {
   public: {
@@ -52,12 +78,11 @@ export interface Database {
         Insert: ProfileInsert;
         Update: ProfileUpdate;
       };
-      // Add app-specific tables:
-      // items: {
-      //   Row: Item;
-      //   Insert: ItemInsert;
-      //   Update: ItemUpdate;
-      // };
+      tasks: {
+        Row: TaskRow;
+        Insert: TaskInsert;
+        Update: TaskUpdate;
+      };
     };
   };
 }

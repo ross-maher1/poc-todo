@@ -15,9 +15,8 @@
  * };
  */
 
-export const APP_NAME = "Mini App";
+export const APP_NAME = "Todo";
 
 export const STORAGE_KEYS = {
-  items: "mini_app_items",
-  settings: "mini_app_settings",
+  settings: "poc_todo_settings",
 } as const;

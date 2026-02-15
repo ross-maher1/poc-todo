@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
  * Update the metadata for your app.
  */
 export const metadata: Metadata = {
-  title: "Mini App",
-  description: "A mini-app built with Next.js",
+  title: "Todo",
+  description: "A simple task manager to test the unified-user model",
 };
 
 export default function RootLayout({
